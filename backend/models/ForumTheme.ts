@@ -21,16 +21,18 @@ const ForumTheme = new Schema({
         type: String,
         validate: {
             validator: function (this:INews){
-                return this.image || this.description;
-            }
+                return !!this.description || !!this.image;
+            },
+            message: 'Description is required if image is not provided.',
         }
     },
     image:{
         type: String,
         validate: {
             validator: function (this:INews){
-                return this.description || this.image;
-            }
+                return !!this.image || !!this.description;
+            },
+            message: 'Description is required if image is not provided.',
         }
     },
 })
