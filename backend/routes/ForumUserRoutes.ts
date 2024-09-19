@@ -2,6 +2,7 @@ import express from "express";
 import {randomUUID} from "crypto";
 import User from "../models/ForumUser";
 import mongoose from "mongoose";
+import bcrypt from 'bcrypt';
 
 
 const ForumUserRouter = express.Router();

@@ -35,6 +35,9 @@ const ForumTheme = new Schema({
             message: 'Description is required if image is not provided.',
         }
     },
+    date:{
+        type:String,
+    }
 })
 
 const Forum = mongoose.model('Forum' , ForumTheme);
