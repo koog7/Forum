@@ -1,5 +1,6 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import axiosAPI from "../../axios/AxiosAPI.ts";
+import {RootState} from "../../app/store.ts";
 
 export interface User{
     _id: string,
@@ -41,6 +42,13 @@ export const authorizationUser = createAsyncThunk<User , LoginData , { rejectVal
     }
 });
 
+export const logout = createAsyncThunk<void, void, {state: RootState}>('users/logout',
+    async (_, {getState}) => {
+        const token = getState().user.user?.token;
+        // noinspection JSAnnotator
+        await axiosAPI.delete('/users/sessions', {headers: { 'Authorization': `Bearer ${token}` }});
+    }
+);
 
 export const UserSlice = createSlice({
     name:'User',
@@ -76,7 +84,19 @@ export const UserSlice = createSlice({
         builder.addCase(authorizationUser.rejected, (state: UserState , action) => {
             state.loader = false;
             state.error = action.payload as string;
-
+        })
+        builder.addCase(logout.pending, (state: UserState) => {
+            state.loader = true;
+            state.error = null;
+        });
+        builder.addCase(logout.fulfilled, (state: UserState) => {
+            state.user = null;
+            state.loader = false;
+            state.error = null;
+        });
+        builder.addCase(logout.rejected, (state: UserState , action) => {
+            state.loader = false;
+            state.error = action.payload as string;
         });
     },
 })

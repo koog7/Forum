@@ -1,16 +1,23 @@
 import React, {useEffect} from 'react';
 import {AppBar, Button, IconButton, Toolbar, Typography} from "@mui/material";
 import {NavLink} from "react-router-dom";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../app/store.ts";
+import {logout} from "../containers/Thunk/AuthSlice.ts";
 
 const Navbar = () => {
 
     const userData = useSelector((state: RootState) => state.User.user)
-
+    const dispatch = useDispatch();
     useEffect(() => {
         console.log(userData)
     }, [userData]);
+
+    const logOut = async () => {
+        await localStorage.removeItem("persist:liteReddit:User");
+        await dispatch(logout())
+        location.reload()
+    }
     return (
         <div>
             <AppBar position="static" sx={{backgroundColor:'#424242' , minWidth:'800px'}}>
@@ -27,12 +34,25 @@ const Navbar = () => {
                             Lite Reddit
                         </NavLink>
                     </Typography>
-                    <NavLink to={'/login'}>
-                        <Button color="inherit">Log in</Button>
-                    </NavLink>
-                    <NavLink to={'/'}>
-                        <Button color="inherit">Sign up</Button>
-                    </NavLink>
+                    {userData? (
+                        <div style={{display:'flex', alignItems:'center'}}>
+                            <p style={{fontSize:'18px', marginTop:'15px', marginRight:'10px'}}>Welcome, {userData.username}!</p>
+                            <NavLink to={'/'}>
+                                <Button color="inherit">Create new post</Button>
+                            </NavLink>
+                            <p style={{fontSize:'18px', margin: '10px 10px 10px 0'}}>or</p>
+                            <Button color="inherit" onClick={logOut}>Log out</Button>
+                        </div>
+                    ):(
+                        <div>
+                            <NavLink to={'/login'}>
+                                <Button color="inherit">Log in</Button>
+                            </NavLink>
+                            <NavLink to={'/'}>
+                                <Button color="inherit">Sign up</Button>
+                            </NavLink>
+                        </div>
+                    )}
                 </Toolbar>
             </AppBar>
         </div>
