@@ -9,14 +9,13 @@ const Navbar = () => {
 
     const userData = useSelector((state: RootState) => state.User.user)
     const dispatch = useDispatch();
-    useEffect(() => {
-        console.log(userData)
-    }, [userData]);
 
     const logOut = async () => {
-        await localStorage.removeItem("persist:liteReddit:User");
-        await dispatch(logout())
-        location.reload()
+        if(userData){
+            await dispatch(logout(userData.token))
+            localStorage.removeItem("persist:liteReddit:User");
+            location.reload()
+        }
     }
     return (
         <div>
