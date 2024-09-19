@@ -6,6 +6,7 @@ import {getPosts} from "./containers/Thunk/ForumPostSlice.ts";
 import {useDispatch} from "react-redux";
 import {AppDispatch} from "./app/store.ts";
 import Navbar from "./components/Navbar.tsx";
+import Login from "./containers/AuthPages/Login.tsx";
 
 const App = () => {
     const dispatch = useDispatch<AppDispatch>();
@@ -21,6 +22,9 @@ const App = () => {
             <Routes>
                 <Route path="/" element={(
                     <Home/>
+                )}/>
+                <Route path="/login" element={(
+                    <Login/>
                 )}/>
             </Routes>
         </>

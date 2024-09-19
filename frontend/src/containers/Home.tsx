@@ -1,17 +1,12 @@
-import React, {useEffect} from 'react';
-import {AppDispatch, RootState} from "../app/store.ts";
-import {useDispatch, useSelector} from "react-redux";
-import {getPosts} from "./Thunk/ForumPostSlice.ts";
+import React from 'react';
+import {RootState} from "../app/store.ts";
+import {useSelector} from "react-redux";
 import PostCard from "../components/PostCard.tsx";
 
 const Home = () => {
 
-
     const postData = useSelector((state: RootState) => state.Post.PostData)
 
-    useEffect(() => {
-        console.log(postData)
-    }, [postData]);
     return (
         <div>
             {postData.length === 0 ? (
