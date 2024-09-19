@@ -1,11 +1,28 @@
 import './App.css'
 import Home from "./containers/Home.tsx";
+import {Route, Routes} from "react-router-dom";
+import {useEffect} from "react";
+import {getPosts} from "./containers/Thunk/ForumPostSlice.ts";
+import {useDispatch} from "react-redux";
+import {AppDispatch} from "./app/store.ts";
+import Navbar from "./components/Navbar.tsx";
 
 const App = () => {
+    const dispatch = useDispatch<AppDispatch>();
+    useEffect(() => {
+        dispatch(getPosts())
+    }, []);
 
     return(
         <>
-            <Home/>
+            <div>
+                <Navbar />
+            </div>
+            <Routes>
+                <Route path="/" element={(
+                    <Home/>
+                )}/>
+            </Routes>
         </>
     )
 };
