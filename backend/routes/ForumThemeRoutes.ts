@@ -20,6 +20,22 @@ ForumThemeRouter.get('/' , async (req ,res ,next) =>{
     }
 })
 
+ForumThemeRouter.get('/:id' , async (req ,res ,next) =>{
+    const { id } = req.params;
+
+    try{
+        const allPosts = await Forum.findById(id);
+
+        if(!allPosts){
+            return res.status(400).send({error: 'Some problems with fetching post'})
+        }
+
+        res.send(allPosts)
+    }catch (e) {
+        next(e)
+    }
+})
+
 ForumThemeRouter.post('/', imagesUpload.single('photo'), async (req,res,next) => {
     const getToken = req.get('Authorization');
 
