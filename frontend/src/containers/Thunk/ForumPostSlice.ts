@@ -12,12 +12,14 @@ interface PostProps{
 }
 interface PostState{
     PostData: PostProps[],
+    OnePost: PostProps[],
     loader: boolean,
     error: string | null;
 }
 
 const initialState: PostState = {
     PostData: [],
+    OnePost: [],
     loader: false,
     error: null,
 }
@@ -25,6 +27,15 @@ const initialState: PostState = {
 export const getPosts = createAsyncThunk<PostProps[], void , { state: RootState }>('post/getPost', async () => {
     try{
         const response = await axiosAPI.get(`/post`);
+        return response.data;
+    }catch (error) {
+        console.error('Error:', error);
+    }
+});
+
+export const getOnePosts = createAsyncThunk<PostProps[], string , { state: RootState }>('post/getOnePost', async (id:string) => {
+    try{
+        const response = await axiosAPI.get(`/post/${id}`);
         return response.data;
     }catch (error) {
         console.error('Error:', error);
@@ -49,6 +60,18 @@ export const ForumPostSlice = createSlice({
             state.loader = false;
         });
         builder.addCase(getPosts.rejected, (state: PostState) => {
+            state.loader = false;
+            state.error = 'error';
+        });
+        builder.addCase(getOnePosts.pending, (state: PostState) => {
+            state.loader = true;
+            state.error = null;
+        });
+        builder.addCase(getOnePosts.fulfilled, (state: PostState, action) => {
+            state.OnePost = action.payload;
+            state.loader = false;
+        });
+        builder.addCase(getOnePosts.rejected, (state: PostState) => {
             state.loader = false;
             state.error = 'error';
         });

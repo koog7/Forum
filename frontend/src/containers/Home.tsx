@@ -19,6 +19,7 @@ const Home = () => {
                         description={post.description}
                         image={post.image || ''}
                         date={post.date}
+                        _id={post._id}
                     />
                 ))
             )}
