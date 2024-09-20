@@ -144,8 +144,6 @@ export const ForumPostSlice = createSlice({
 
             state.MessageData = [...state.MessageData, ...(Array.isArray(action.payload) ? action.payload : [action.payload])];
             state.loader = false;
-            console.log(action.payload)
-            console.log(state.MessageData)
         });
         builder.addCase(postMessage.rejected, (state: PostState) => {
             state.loader = false;
