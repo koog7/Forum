@@ -41,6 +41,25 @@ export const getPosts = createAsyncThunk<PostProps[], void , { state: RootState 
     }
 });
 
+export const postPosts = createAsyncThunk<PostProps[], {title: string; photo?: File; description?: string; token: string } , { state: RootState }>('post/postPost', async ({ title, photo, description, token }) => {
+    try{
+        const formData = new FormData();
+        formData.append('title', title);
+
+        if (photo) {
+            formData.append('photo', photo);
+        }
+
+        if (description) {
+            formData.append('description', description);
+        }
+        const response = await axiosAPI.post(`/post` , formData , {headers: { 'Authorization': `Bearer ${token}` }});
+        return response.data;
+    }catch (error) {
+        console.error('Error:', error);
+    }
+});
+
 export const getOnePosts = createAsyncThunk<PostProps[], string , { state: RootState }>('post/getOnePost', async (id:string) => {
     try{
         const response = await axiosAPI.get(`/post/${id}`);
@@ -61,7 +80,6 @@ export const getMessage = createAsyncThunk<MessageProps[], string , { state: Roo
 
 export const postMessage = createAsyncThunk<MessageProps[], { id: string; message: string; token: string } , { state: RootState }>('message/postMessage', async ({ id, message, token }) => {
     try{
-        // noinspection JSAnnotator
         const response = await axiosAPI.post(`/message/${id}`, {message}, {headers: { 'Authorization': `Bearer ${token}` }});
         return response.data;
     }catch (error) {
@@ -130,6 +148,17 @@ export const ForumPostSlice = createSlice({
             console.log(state.MessageData)
         });
         builder.addCase(postMessage.rejected, (state: PostState) => {
+            state.loader = false;
+            state.error = 'error';
+        });
+        builder.addCase(postPosts.pending, (state: PostState) => {
+            state.loader = true;
+            state.error = null;
+        });
+        builder.addCase(postPosts.fulfilled, (state: PostState) => {
+            state.loader = false;
+        });
+        builder.addCase(postPosts.rejected, (state: PostState) => {
             state.loader = false;
             state.error = 'error';
         });

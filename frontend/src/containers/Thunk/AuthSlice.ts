@@ -44,7 +44,6 @@ export const authorizationUser = createAsyncThunk<User , LoginData , { rejectVal
 
 export const logout = createAsyncThunk<void, string, {state: RootState}>('users/logout',
     async (userToken: string) => {
-        // noinspection JSAnnotator
         await axiosAPI.delete('/users/sessions', {headers: { 'Authorization': `Bearer ${userToken}` }});
     }
 );
