@@ -10,6 +10,7 @@ import Login from "./containers/AuthPages/Login.tsx";
 import SignUp from "./containers/AuthPages/SignUp.tsx";
 import PostBlock from "./containers/PostBlock.tsx";
 import NotFound from "./components/NotFound.tsx";
+import FormCreatePost from "./containers/FormCreatePost.tsx";
 
 const App = () => {
     const dispatch = useDispatch<AppDispatch>();
@@ -37,6 +38,9 @@ const App = () => {
                 )}/>
                 <Route path="*" element={(
                     <NotFound/>
+                )}/>
+                <Route path="/createPost" element={(
+                    <FormCreatePost/>
                 )}/>
             </Routes>
         </>
