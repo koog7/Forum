@@ -9,6 +9,7 @@ import Navbar from "./components/Navbar.tsx";
 import Login from "./containers/AuthPages/Login.tsx";
 import SignUp from "./containers/AuthPages/SignUp.tsx";
 import PostBlock from "./containers/PostBlock.tsx";
+import NotFound from "./components/NotFound.tsx";
 
 const App = () => {
     const dispatch = useDispatch<AppDispatch>();
@@ -33,6 +34,9 @@ const App = () => {
                 )}/>
                 <Route path="/post/:id" element={(
                     <PostBlock/>
+                )}/>
+                <Route path="*" element={(
+                    <NotFound/>
                 )}/>
             </Routes>
         </>
