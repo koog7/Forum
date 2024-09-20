@@ -53,7 +53,9 @@ ForumMessageRouter.post('/:id',async (req, res , next) =>{
         })
 
         await newPostMessage.save()
-        res.send(newPostMessage);
+
+        const populatedMessage = await Message.findById(newPostMessage._id).populate('userId', 'username');
+        res.send(populatedMessage);
     }catch (e) {
         next(e)
     }

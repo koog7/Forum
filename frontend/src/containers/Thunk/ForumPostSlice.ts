@@ -55,16 +55,18 @@ export const getMessage = createAsyncThunk<MessageProps[], string , { state: Roo
         const response = await axiosAPI.get(`/message/${id}`);
         return response.data;
     }catch (error) {
-        console.error('Error:', error);
+        console.error('Error:', error)
     }
 });
 
-export const postMessage = createAsyncThunk<MessageProps[], string , { state: RootState }>('message/postMessage', async (id:string) => {
+export const postMessage = createAsyncThunk<MessageProps[], { id: string; message: string; token: string } , { state: RootState }>('message/postMessage', async ({ id, message, token }) => {
     try{
-        const response = await axiosAPI.get(`/message/${id}`);
+        // noinspection JSAnnotator
+        const response = await axiosAPI.post(`/message/${id}`, {message}, {headers: { 'Authorization': `Bearer ${token}` }});
         return response.data;
     }catch (error) {
         console.error('Error:', error);
+        throw error;
     }
 });
 
@@ -110,6 +112,20 @@ export const ForumPostSlice = createSlice({
             state.loader = false;
         });
         builder.addCase(getMessage.rejected, (state: PostState) => {
+            state.loader = false;
+            state.error = 'error';
+        });
+        builder.addCase(postMessage.pending, (state: PostState) => {
+            state.loader = true;
+            state.error = null;
+        });
+        builder.addCase(postMessage.fulfilled, (state: PostState, action) => {
+            state.MessageData = [...state.MessageData, ...(Array.isArray(action.payload) ? action.payload : [action.payload])];
+            state.loader = false;
+            console.log(action.payload)
+            console.log(state.MessageData)
+        });
+        builder.addCase(postMessage.rejected, (state: PostState) => {
             state.loader = false;
             state.error = 'error';
         });

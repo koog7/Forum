@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch, RootState} from "../app/store.ts";
-import {getMessage, getOnePosts} from "./Thunk/ForumPostSlice.ts";
-import {NavLink, useParams} from "react-router-dom";
+import {getMessage, getOnePosts, postMessage} from "./Thunk/ForumPostSlice.ts";
+import {useParams} from "react-router-dom";
 import {Box, Button, Card, CardContent, CardMedia, TextField, Typography} from "@mui/material";
 import CardMessage from "../components/CardMessage.tsx";
 
@@ -14,13 +14,25 @@ const PostBlock = () => {
     const MessagePost = useSelector((state: RootState) => state.Post.MessageData)
     const userData = useSelector((state: RootState) => state.User.user)
 
-    const [message , setMessage] = useState();
+    const [message , setMessage] = useState('');
 
 
     useEffect(() => {
-        dispatch(getOnePosts(id))
-        dispatch(getMessage(id))
+        if(id){
+            dispatch(getOnePosts(id))
+            dispatch(getMessage(id))
+        }
     }, [dispatch , id]);
+
+
+    const sentMessage = async () => {
+        if (userData && userData.token) {
+            const getToken = userData.token;
+            await dispatch(postMessage({ id, message, token: getToken }));
+        } else {
+            console.error('User data or token is undefined');
+        }
+    }
 
     if (!OnePost || !OnePost._id) {
         return (
@@ -66,29 +78,33 @@ const PostBlock = () => {
             </Card>
             {userData? (
                 <div style={{marginTop:'50px', display:'flex'}}>
-                    <TextField
-                        label="Message"
-                        variant="filled"
-                        fullWidth
-                        value={message}
-                        onChange={(e) => setMessage(e.target.value)}
-                        InputProps={{
-                            style: { backgroundColor: 'white' },
-                        }}
-                    />
-                    <Button
-                        variant="contained"
-                        sx={{
-                            backgroundColor: 'white',
-                            color: 'black',
-                            '&:hover': {
-                                backgroundColor: '#f0f0f0',
-                            },
-                            marginLeft:'20px',
-                            width:'150px'
-                        }}>
-                        Enter
-                    </Button>
+                    <form style={{display:'flex', width: '900px'}}>
+                        <TextField
+                            label="Message"
+                            variant="filled"
+                            fullWidth
+                            required={true}
+                            value={message}
+                            onChange={(e) => setMessage(e.target.value)}
+                            InputProps={{
+                                style: { backgroundColor: 'white' },
+                            }}
+                        />
+                        <Button
+                            variant="contained"
+                            onClick={sentMessage}
+                            sx={{
+                                backgroundColor: 'white',
+                                color: 'black',
+                                '&:hover': {
+                                    backgroundColor: '#f0f0f0',
+                                },
+                                marginLeft:'20px',
+                                width:'150px'
+                            }}>
+                            Enter
+                        </Button>
+                    </form>
                 </div>
             ): (
                 <div></div>
@@ -96,12 +112,11 @@ const PostBlock = () => {
 
             {MessagePost && MessagePost.length > 0 ? (
                 MessagePost.map((message) => (
-                    <CardMessage key={message._id} username={message.userId.username} message={message.message} />
+                    <CardMessage key={message._id} username={message.userId ? message.userId.username : 'Unknown User'} message={message.message} />
                 ))
             ) : (
                 <div>No messages</div>
             )}
-
         </div>
     );
 };
