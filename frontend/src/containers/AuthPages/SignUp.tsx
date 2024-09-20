@@ -9,7 +9,7 @@ const Login = () => {
 
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
-
+    const [localError , setLocalError] = useState<boolean>(false)
 
     const [login, setLogin] = useState({
         username: '',
@@ -19,8 +19,14 @@ const Login = () => {
     const submitData = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            await dispatch(loginUser(login));
-            navigate('/');
+            const dis = await dispatch(loginUser(login));
+
+            if (dis.type === 'users/singIn/rejected'){
+                setLocalError(true)
+            }else{
+                navigate('/');
+            }
+
         } catch (error) {
             console.log('Unexpected Error:', error);
         }
@@ -69,6 +75,11 @@ const Login = () => {
                         style: { backgroundColor: 'white' },
                     }}
                 />
+                {localError && (
+                    <div>
+                        <p style={{color:'red'}}>Useranme are already claimed</p>
+                    </div>
+                )}
                 <Button
                     variant="contained"
                     sx={{

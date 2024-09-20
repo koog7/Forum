@@ -15,12 +15,19 @@ const Login = () => {
         username: '',
         password: '',
     });
+    const [localError , setLocalError] = useState<boolean>(false)
 
     const submitData = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            await dispatch(authorizationUser(login));
-            navigate('/');
+            const dis = await dispatch(authorizationUser(login));
+
+            if (dis.type === 'users/singUp/rejected'){
+                setLocalError(true)
+            }else{
+                navigate('/');
+            }
+
         } catch (error) {
             console.log('Unexpected Error:', error);
         }
@@ -69,6 +76,11 @@ const Login = () => {
                         style: { backgroundColor: 'white' },
                     }}
                 />
+                {localError && (
+                    <div>
+                        <p style={{color:'red'}}>Useranme or password are incorrect</p>
+                    </div>
+                )}
                 <Button
                     variant="contained"
                     sx={{

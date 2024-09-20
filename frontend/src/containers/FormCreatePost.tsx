@@ -79,7 +79,7 @@ const FormCreatePost = () => {
                     }}
                 />
                 <input ref={urlFile} accept="image/*" onChange={onFileChange} type={"file"} style={{marginTop:'20px'}}/>
-
+                
                 {info && (
                     <div>
                         <p style={{color:'red'}}>Provide photo or description</p>
