@@ -1,18 +1,25 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch, RootState} from "../app/store.ts";
-import {getOnePosts} from "./Thunk/ForumPostSlice.ts";
+import {getMessage, getOnePosts} from "./Thunk/ForumPostSlice.ts";
 import {NavLink, useParams} from "react-router-dom";
-import {Box, Card, CardContent, CardMedia, Typography} from "@mui/material";
+import {Box, Button, Card, CardContent, CardMedia, TextField, Typography} from "@mui/material";
+import CardMessage from "../components/CardMessage.tsx";
 
 const PostBlock = () => {
 
     const {id} = useParams();
     const dispatch = useDispatch<AppDispatch>()
     const OnePost = useSelector((state: RootState) => state.Post.OnePost)
+    const MessagePost = useSelector((state: RootState) => state.Post.MessageData)
+    const userData = useSelector((state: RootState) => state.User.user)
+
+    const [message , setMessage] = useState();
+
 
     useEffect(() => {
         dispatch(getOnePosts(id))
+        dispatch(getMessage(id))
     }, [dispatch , id]);
 
     if (!OnePost || !OnePost._id) {
@@ -57,6 +64,44 @@ const PostBlock = () => {
                     </CardContent>
                 </Box>
             </Card>
+            {userData? (
+                <div style={{marginTop:'50px', display:'flex'}}>
+                    <TextField
+                        label="Message"
+                        variant="filled"
+                        fullWidth
+                        value={message}
+                        onChange={(e) => setMessage(e.target.value)}
+                        InputProps={{
+                            style: { backgroundColor: 'white' },
+                        }}
+                    />
+                    <Button
+                        variant="contained"
+                        sx={{
+                            backgroundColor: 'white',
+                            color: 'black',
+                            '&:hover': {
+                                backgroundColor: '#f0f0f0',
+                            },
+                            marginLeft:'20px',
+                            width:'150px'
+                        }}>
+                        Enter
+                    </Button>
+                </div>
+            ): (
+                <div></div>
+            )}
+
+            {MessagePost && MessagePost.length > 0 ? (
+                MessagePost.map((message) => (
+                    <CardMessage key={message._id} username={message.userId.username} message={message.message} />
+                ))
+            ) : (
+                <div>No messages</div>
+            )}
+
         </div>
     );
 };

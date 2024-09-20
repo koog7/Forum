@@ -10,9 +10,16 @@ interface PostProps{
     image?: string,
     date: string,
 }
+interface MessageProps{
+    _id: string,
+    postId: string,
+    userId: string,
+    message: string,
+}
 interface PostState{
     PostData: PostProps[],
     OnePost: PostProps[],
+    MessageData: MessageProps[],
     loader: boolean,
     error: string | null;
 }
@@ -20,6 +27,7 @@ interface PostState{
 const initialState: PostState = {
     PostData: [],
     OnePost: [],
+    MessageData: [],
     loader: false,
     error: null,
 }
@@ -36,6 +44,24 @@ export const getPosts = createAsyncThunk<PostProps[], void , { state: RootState 
 export const getOnePosts = createAsyncThunk<PostProps[], string , { state: RootState }>('post/getOnePost', async (id:string) => {
     try{
         const response = await axiosAPI.get(`/post/${id}`);
+        return response.data;
+    }catch (error) {
+        console.error('Error:', error);
+    }
+});
+
+export const getMessage = createAsyncThunk<MessageProps[], string , { state: RootState }>('message/getMessage', async (id:string) => {
+    try{
+        const response = await axiosAPI.get(`/message/${id}`);
+        return response.data;
+    }catch (error) {
+        console.error('Error:', error);
+    }
+});
+
+export const postMessage = createAsyncThunk<MessageProps[], string , { state: RootState }>('message/postMessage', async (id:string) => {
+    try{
+        const response = await axiosAPI.get(`/message/${id}`);
         return response.data;
     }catch (error) {
         console.error('Error:', error);
@@ -72,6 +98,18 @@ export const ForumPostSlice = createSlice({
             state.loader = false;
         });
         builder.addCase(getOnePosts.rejected, (state: PostState) => {
+            state.loader = false;
+            state.error = 'error';
+        });
+        builder.addCase(getMessage.pending, (state: PostState) => {
+            state.loader = true;
+            state.error = null;
+        });
+        builder.addCase(getMessage.fulfilled, (state: PostState, action) => {
+            state.MessageData = action.payload;
+            state.loader = false;
+        });
+        builder.addCase(getMessage.rejected, (state: PostState) => {
             state.loader = false;
             state.error = 'error';
         });
