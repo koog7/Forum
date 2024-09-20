@@ -37,7 +37,7 @@ const Navbar = () => {
                         <div style={{display:'flex', alignItems:'center'}}>
                             <p style={{fontSize:'18px', marginTop:'15px', marginRight:'10px'}}>Welcome, {userData.username}!</p>
                             <NavLink to={'/createPost'}>
-                                <Button color="inherit">Create new post</Button>
+                                <Button color="inherit" style={{color:'white'}}>Create new post</Button>
                             </NavLink>
                             <p style={{fontSize:'18px', margin: '10px 10px 10px 0'}}>or</p>
                             <Button color="inherit" onClick={logOut}>Log out</Button>

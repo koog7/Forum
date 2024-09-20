@@ -35,7 +35,7 @@ const PostCard:React.FC<Props> = ({_id , title , description , image , date}) =>
                 <Box sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1, justifyContent: 'center' }}>
                     <CardContent sx={{ textAlign: 'left' }}>
                         <Typography variant="h5" component="div">
-                            <NavLink to={`/post/${_id}`} style={{color:'black',textDecoration:'none'}}>
+                            <NavLink to={`/post/${_id}`} className={'title'}>
                                 {title}
                             </NavLink>
                         </Typography>

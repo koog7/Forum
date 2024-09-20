@@ -78,7 +78,7 @@ const Login = () => {
                 />
                 {localError && (
                     <div>
-                        <p style={{color:'red'}}>Useranme or password are incorrect</p>
+                        <p style={{color:'red'}}>Username or password are incorrect</p>
                     </div>
                 )}
                 <Button

@@ -78,42 +78,46 @@ const PostBlock = () => {
                 </Box>
             </Card>
             {userData? (
-                <div style={{marginTop:'50px', display:'flex'}}>
-                    <form style={{display:'flex', width: '900px'}}>
-                        <TextField
-                            label="Message"
-                            variant="filled"
-                            fullWidth
-                            required={true}
-                            value={message}
-                            onChange={(e) => setMessage(e.target.value)}
-                            InputProps={{
-                                style: { backgroundColor: 'white' },
-                            }}
-                        />
-                        <Button
-                            variant="contained"
-                            onClick={sentMessage}
-                            sx={{
-                                backgroundColor: 'white',
-                                color: 'black',
-                                '&:hover': {
-                                    backgroundColor: '#f0f0f0',
-                                },
-                                marginLeft:'20px',
-                                width:'150px'
-                            }}>
-                            Enter
-                        </Button>
-                    </form>
+                <div>
+                    <h1 style={{margin:'50px 0 0 0'}}>Leave a message</h1>
+                    <div style={{marginTop: '20px', display: 'flex', marginBottom:'50px'}}>
+                        <form style={{display: 'flex', width: '900px'}}>
+                            <TextField
+                                label="Message"
+                                variant="filled"
+                                fullWidth
+                                required={true}
+                                value={message}
+                                onChange={(e) => setMessage(e.target.value)}
+                                InputProps={{
+                                    style: {backgroundColor: 'white'},
+                                }}
+                            />
+                            <Button
+                                variant="contained"
+                                onClick={sentMessage}
+                                sx={{
+                                    backgroundColor: 'white',
+                                    color: 'black',
+                                    '&:hover': {
+                                        backgroundColor: '#f0f0f0',
+                                    },
+                                    marginLeft: '20px',
+                                    width: '150px'
+                                }}>
+                                Enter
+                            </Button>
+                        </form>
+                    </div>
                 </div>
-            ): (
+            ) : (
                 <div></div>
             )}
 
             {MessagePost && MessagePost.length > 0 ? (
                 MessagePost.map((message) => (
-                    <CardMessage key={message._id} username={message.userId ? message.userId.username : 'Unknown User'} message={message.message} />
+                    <CardMessage key={message._id} username={message.userId ? message.userId.username : 'Unknown User'}
+                                 message={message.message}/>
                 ))
             ) : (
                 <div>No messages</div>
