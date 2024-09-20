@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useRef, useState} from 'react';
+import React, {ChangeEvent, useEffect, useRef, useState} from 'react';
 import {Button, TextField} from "@mui/material";
 import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch, RootState} from "../app/store.ts";
@@ -19,6 +19,14 @@ const FormCreatePost = () => {
         title: '',
         description: ''
     });
+
+
+
+    useEffect(() => {
+        if(!userData){
+            navigate('/')
+        }
+    }, [userData]);
 
     const onFileChange = (e: ChangeEvent<HTMLInputElement>) => {
         const fileInput = e.target.files
@@ -79,7 +87,7 @@ const FormCreatePost = () => {
                     }}
                 />
                 <input ref={urlFile} accept="image/*" onChange={onFileChange} type={"file"} style={{marginTop:'20px'}}/>
-                
+
                 {info && (
                     <div>
                         <p style={{color:'red'}}>Provide photo or description</p>
