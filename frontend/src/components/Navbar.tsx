@@ -47,7 +47,7 @@ const Navbar = () => {
                             <NavLink to={'/login'}>
                                 <Button color="inherit">Log in</Button>
                             </NavLink>
-                            <NavLink to={'/'}>
+                            <NavLink to={'/signup'}>
                                 <Button color="inherit">Sign up</Button>
                             </NavLink>
                         </div>
