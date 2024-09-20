@@ -3,10 +3,11 @@ import mongoose from "mongoose";
 import ForumThemeRouter from "./routes/ForumThemeRoutes";
 import ForumUserRouter from "./routes/ForumUserRoutes";
 import ForumMessageRouter from "./routes/ForumMessageRoutes";
-
+import cors from 'cors';
 const app = express();
 const port = 8000;
 
+app.use(cors())
 app.use(express.json())
 app.use(express.static('public'))
 app.use('/post', ForumThemeRouter)
