@@ -6,6 +6,22 @@ import Forum from "../models/ForumTheme";
 const ForumMessageRouter = express.Router();
 ForumMessageRouter.use(express.json());
 
+
+ForumMessageRouter.get('/:id' , async (req ,res ,next) =>{
+    try {
+        const id = req.params.id;
+
+        const messages = await Message.find({postId: id }).populate('userId', 'username');
+
+        if(messages.length === 0){
+            return res.status(401).send({ error: 'Not found' });
+        }
+        res.send(messages);
+    }catch (e) {
+        next(e)
+    }
+})
+
 ForumMessageRouter.post('/:id',async (req, res , next) =>{
     const getToken = req.get('Authorization')
 
