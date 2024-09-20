@@ -19,7 +19,7 @@ interface MessageProps{
 interface PostState{
     PostData: PostProps[],
     OnePost: PostProps[],
-    MessageData: MessageProps[],
+    MessageData: MessageProps[] ,
     loader: boolean,
     error: string | null;
 }
@@ -120,6 +120,10 @@ export const ForumPostSlice = createSlice({
             state.error = null;
         });
         builder.addCase(postMessage.fulfilled, (state: PostState, action) => {
+            if (!Array.isArray(state.MessageData)) {
+                state.MessageData = [];
+            }
+
             state.MessageData = [...state.MessageData, ...(Array.isArray(action.payload) ? action.payload : [action.payload])];
             state.loader = false;
             console.log(action.payload)

@@ -29,6 +29,7 @@ const PostBlock = () => {
         if (userData && userData.token) {
             const getToken = userData.token;
             await dispatch(postMessage({ id, message, token: getToken }));
+            setMessage('')
         } else {
             console.error('User data or token is undefined');
         }
